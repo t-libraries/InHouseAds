@@ -36,6 +36,71 @@ android {
 
 }
 
+ext {
+    PUBLISH_GROUP_ID = "com.admob.inhouseads"
+    PUBLISH_VERSION = "v1.0.0"
+    PUBLISH_ARTIFACT_ID = "inhouseads"
+    PUBLISH_DESCRIPTION = "An android gradle plugin for InHouse Ads"
+    PUBLISH_URL = "https://github.com/t-libraries/InHouseAds"
+    PUBLISH_LICENSE_NAME = "Apache 2.0 License"
+    PUBLISH_LICENSE_URL = "https://www.apache.org/licenses/LICENSE-2.0"
+    PUBLISH_DEVELOPER_ID = "t-libraries"
+    PUBLISH_DEVELOPER_NAME = "t-libraries"
+    PUBLISH_DEVELOPER_EMAIL = "mailto:developerresource@technest.pk"
+    PUBLISH_SCM_CONNECTION = "scm:git:ssh://github.com/t-libraries/t-libraries/InHouseAds.git"
+    PUBLISH_SCM_DEVELOPER_CONNECTION = "scm:git:ssh://github.com/t-libraries/InHouseAds.git"
+    PUBLISH_SCM_URL = "https://github.com/t-libraries/InHouseAds"
+}
+
+
+version = project.ext.PUBLISH_VERSION
+group = project.ext.PUBLISH_GROUP_ID
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            create("release", MavenPublication) {
+                // Applies the component for the release build variant.
+                from components["release"]
+
+                // Use the properties from the `ext` block
+                groupId = project.ext.PUBLISH_GROUP_ID
+                artifactId = project.ext.PUBLISH_ARTIFACT_ID
+                version = project.ext.PUBLISH_VERSION
+
+                // Add additional metadata to the POM
+                pom {
+                    name.set(project.ext.PUBLISH_ARTIFACT_ID)
+                    description.set(project.ext.PUBLISH_DESCRIPTION)
+                    url.set(project.ext.PUBLISH_URL)
+
+                    licenses {
+                        license {
+                            name.set(project.ext.PUBLISH_LICENSE_NAME)
+                            url.set(project.ext.PUBLISH_LICENSE_URL)
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set(project.ext.PUBLISH_DEVELOPER_ID)
+                            name.set(project.ext.PUBLISH_DEVELOPER_NAME)
+                            email.set(project.ext.PUBLISH_DEVELOPER_EMAIL)
+                        }
+                    }
+
+                    scm {
+                        connection.set(project.ext.PUBLISH_SCM_CONNECTION)
+                        developerConnection.set(project.ext.PUBLISH_SCM_DEVELOPER_CONNECTION)
+                        url.set(project.ext.PUBLISH_SCM_URL)
+                    }
+                }
+            }
+        }
+    }
+}
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.18.0'
