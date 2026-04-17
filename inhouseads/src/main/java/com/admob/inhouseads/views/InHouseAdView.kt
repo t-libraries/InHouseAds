@@ -39,14 +39,24 @@ class InHouseAdView @JvmOverloads constructor(
         skeleton = findViewById(R.id.skeletonLayout)
     }
 
-    fun setAd(model: ToolbarHouseAdModel?, event: (String) -> Unit = {}) {
+    fun setAd(
+        toobarHouseAdModel: ToolbarHouseAdModel?,
+        defaulttoobarHouseAdModel: ToolbarHouseAdModel?,
+        event: (String) -> Unit = {}
+    ) {
 
-        if (model == null || !model.show_house_ad) {
+
+        var model = toobarHouseAdModel
+        if (model == null || model.destination_url == "") {
+            model = defaulttoobarHouseAdModel
+        }
+
+        if (model?.show_house_ad == false) {
             adCard.visibility = GONE
             return
         }
 
-        event.invoke("${model.destination_app}_icon")
+        event.invoke("${model?.destination_app}_icon")
 
         adCard.visibility = VISIBLE
         attrIcon.visibility = VISIBLE
@@ -54,7 +64,7 @@ class InHouseAdView @JvmOverloads constructor(
         skeleton.visibility = VISIBLE
         icon.visibility = INVISIBLE
 
-        if (model.app_icon.isNotEmpty()) {
+        if (model?.app_icon?.isNotEmpty() == true) {
 
             Glide.with(context)
                 .load(model.app_icon)
@@ -92,7 +102,7 @@ class InHouseAdView @JvmOverloads constructor(
             try {
                 event.invoke("icon_onClick")
                 context.startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse(model.destination_url))
+                    Intent(Intent.ACTION_VIEW, Uri.parse(model?.destination_url))
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
