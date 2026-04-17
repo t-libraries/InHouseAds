@@ -63,22 +63,29 @@ object InterstitialInHouseAds {
 
     @SuppressLint("StaticFieldLeak")
     fun Activity.showInHouseAd(
-        inHouseAdModel: InHouseModel,
+        inHouseAdModel: InHouseModel?,
+        defaultAdModel: InHouseModel?,
         onAdDissmissed: () -> Unit = {},
         event: (String) -> Unit = {}
     ) {
+
+        var successinHouseAdModel = inHouseAdModel
+
+        if (successinHouseAdModel == null || successinHouseAdModel.destination_url == "") {
+            successinHouseAdModel = defaultAdModel
+        }
 
         if (isPurchased) {
             onAdDissmissed.invoke()
             return
         }
 
-        if (!inHouseAdModel.use_splash_back_fill) {
+        if (successinHouseAdModel?.use_splash_back_fill == false) {
             onAdDissmissed.invoke()
             return
         }
 
-        if (!isNetworkAvailable(this)) {
+        if (successinHouseAdModel?.destination_url == "") {
             onAdDissmissed.invoke()
             return
         }
@@ -87,9 +94,17 @@ object InterstitialInHouseAds {
         isInhouseAdShowing = true
 
 
-        val overlayView = returnViewType(inHouseAdModel.ad_type)
+        val overlayView = successinHouseAdModel?.ad_type?.let { returnViewType(it) }
         currentOverlayView = WeakReference(overlayView)
-        initCloseLayout(overlayView, inHouseAdModel.cross_position, inHouseAdModel.cross_timer)
+        successinHouseAdModel?.cross_position?.let {
+            successinHouseAdModel?.cross_timer?.let { crossTimer ->
+                initCloseLayout(
+                    overlayView,
+                    it,
+                    crossTimer
+                )
+            }
+        }
 
         overlayView?.alpha = 0f
 
@@ -108,12 +123,20 @@ object InterstitialInHouseAds {
 
         Handler(Looper.getMainLooper()).postDelayed({
             event.invoke("SIBF_onCreate")
-            event.invoke("${inHouseAdModel.destination_app}_SIBF")
+            event.invoke("${successinHouseAdModel?.destination_app}_SIBF")
             hideWaitingDialog()
 
-            val overlayView = returnViewType(inHouseAdModel.ad_type)
+            val overlayView = successinHouseAdModel?.ad_type?.let { returnViewType(it) }
             currentOverlayView = WeakReference(overlayView)
-            initCloseLayout(overlayView, inHouseAdModel.cross_position, inHouseAdModel.cross_timer)
+            successinHouseAdModel?.cross_position?.let {
+                successinHouseAdModel?.cross_timer?.let { crossTimer ->
+                    initCloseLayout(
+                        overlayView,
+                        it,
+                        crossTimer
+                    )
+                }
+            }
 
             overlayView?.alpha = 0f
 
@@ -145,7 +168,7 @@ object InterstitialInHouseAds {
                     .start()
             }
 
-            setupTexts(overlayView, inHouseAdModel)
+            successinHouseAdModel?.let { setupTexts(overlayView, it) }
 
             val closeBtnLeft = overlayView?.findViewById<ImageView>(R.id.leftcloseBtn)
             val closeBtnRight = overlayView?.findViewById<ImageView>(R.id.rightcloseBtn)
@@ -153,7 +176,7 @@ object InterstitialInHouseAds {
 
 
 
-            if (inHouseAdModel.ad_type != "4") {
+            if (successinHouseAdModel?.ad_type != "4") {
                 val installBtn = overlayView?.findViewById<ConstraintLayout>(R.id.installBtn)
 
                 installBtn?.setOnClickListener {
@@ -162,7 +185,7 @@ object InterstitialInHouseAds {
                         startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                inHouseAdModel.destination_url.toUri()
+                                successinHouseAdModel.destination_url.toUri()
                             )
                         )
                     } catch (e: ActivityNotFoundException) {
@@ -180,8 +203,8 @@ object InterstitialInHouseAds {
                     skeletonLayout?.visibility = View.VISIBLE
                     appIcon.visibility = View.INVISIBLE
 
-                    if (inHouseAdModel.app_icon != "") {
-                        skeletonLayout?.let { loadImage(appIcon, it, inHouseAdModel) }
+                    if (successinHouseAdModel.app_icon != "") {
+                        skeletonLayout?.let { loadImage(appIcon, it, successinHouseAdModel) }
                     } else {
                         skeletonLayout?.stopLoading()
                         skeletonLayout?.visibility = View.GONE
@@ -201,7 +224,7 @@ object InterstitialInHouseAds {
                         startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                inHouseAdModel.destination_url.toUri()
+                                successinHouseAdModel.destination_url.toUri()
                             )
                         )
                     } catch (e: ActivityNotFoundException) {
@@ -230,7 +253,7 @@ object InterstitialInHouseAds {
                     startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
-                            inHouseAdModel.destination_url.toUri()
+                            successinHouseAdModel.destination_url.toUri()
                         )
                     )
                 } catch (e: ActivityNotFoundException) {
@@ -275,7 +298,7 @@ object InterstitialInHouseAds {
             "4" -> inflater.inflate(R.layout.iha_ad_layout_one, null)
             "5" -> inflater.inflate(R.layout.iha_ad_layout_default, null)
 
-            else -> inflater.inflate(R.layout.iha_ad_layout_default, null)
+            else -> inflater.inflate(R.layout.iha_ad_layout_three, null)
         }
 
     }

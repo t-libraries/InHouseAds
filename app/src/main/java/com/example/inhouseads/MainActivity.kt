@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
             showinterBtn.setOnClickListener {
                 showInHouseAd(
+                    null,
 
                     InHouseModel(
                         title = "Smart Transfer Copy My Data",
@@ -80,4 +81,5 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 }
