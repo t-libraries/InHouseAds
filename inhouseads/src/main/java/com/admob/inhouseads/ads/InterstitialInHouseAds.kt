@@ -22,7 +22,6 @@ import android.view.WindowInsetsController
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
@@ -62,8 +61,6 @@ object InterstitialInHouseAds {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.R)
-    @SuppressLint("StaticFieldLeak")
     fun Activity.showInHouseAd(
         inHouseAdModel: InHouseModel?,
         defaultAdModel: InHouseModel?,
@@ -99,7 +96,7 @@ object InterstitialInHouseAds {
         val overlayView = successinHouseAdModel?.ad_type?.let { returnViewType(it) }
         currentOverlayView = WeakReference(overlayView)
         successinHouseAdModel?.cross_position?.let {
-            successinHouseAdModel?.cross_timer?.let { crossTimer ->
+            successinHouseAdModel.cross_timer.let { crossTimer ->
                 initCloseLayout(
                     overlayView,
                     it,
@@ -131,7 +128,7 @@ object InterstitialInHouseAds {
             val overlayView = successinHouseAdModel?.ad_type?.let { returnViewType(it) }
             currentOverlayView = WeakReference(overlayView)
             successinHouseAdModel?.cross_position?.let {
-                successinHouseAdModel?.cross_timer?.let { crossTimer ->
+                successinHouseAdModel.cross_timer.let { crossTimer ->
                     initCloseLayout(
                         overlayView,
                         it,
