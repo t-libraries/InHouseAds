@@ -43,7 +43,7 @@
                 android:layout_width="@dimen/_42sdp"
                 android:layout_height="@dimen/_38sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
-                android:src="@drawable/iha_ic_ad_attr"
+                android:src="@drawable/iha_ic_ad_attr_2"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/leftcloseBtn"
                 app:layout_constraintEnd_toEndOf="parent"

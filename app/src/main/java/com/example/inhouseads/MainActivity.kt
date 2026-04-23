@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                         benifit_2 = "Easily data transfer across devices",
                         use_splash_back_fill = true,
                         app_icon = "https://play-lh.googleusercontent.com/EEuZGfK0ow_ssK9Rn8AEKHpdkDJ-a4te966wJudTka0oQS_tYrq3H8jttVN8cYeqxoZ4VFTLBUeffyFdp_ab=w240-h480-rw",
-                        cross_position = "right",
+                        cross_position = "left",
                         destination_url = "https://play.google.com/store/apps/details?id=com.mydeviceinfo.phoneinfo&hl=en",
                         cross_timer = 0L,
                         ad_type = "$a"

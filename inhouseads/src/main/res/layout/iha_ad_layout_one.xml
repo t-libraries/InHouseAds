@@ -128,12 +128,14 @@
 
             <TextView
                 android:id="@+id/iha_textview3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
                 android:gravity="center_horizontal"
-                android:text="There is a new version of this app\navailable"
+                android:text="Please update to get new features."
                 android:textAlignment="center"
+                android:lines="1"
+                android:layout_marginHorizontal="@dimen/_15sdp"
                 android:textColor="@color/iha_black"
                 android:textSize="@dimen/_11sdp"
                 app:layout_constraintBottom_toTopOf="@+id/iha_view"

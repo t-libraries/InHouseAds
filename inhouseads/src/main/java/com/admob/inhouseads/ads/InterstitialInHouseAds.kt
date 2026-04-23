@@ -27,6 +27,7 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.admob.inhouseads.R
 import com.admob.inhouseads.data.InHouseModel
 import com.bumptech.glide.Glide
@@ -108,11 +109,9 @@ object InterstitialInHouseAds {
         overlayView?.alpha = 0f
 
         try {
-            window.insetsController?.setSystemBarsAppearance(
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            )
-        } catch (e: Exception) {
+            val controller = WindowInsetsControllerCompat(window, window.decorView)
+            controller.isAppearanceLightStatusBars = true
+        } catch (e: NoSuchMethodError) {
             e.printStackTrace()
         }
 
