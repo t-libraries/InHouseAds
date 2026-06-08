@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
@@ -382,6 +383,9 @@ object InterstitialInHouseAds {
     }
 
     private fun Activity.showWaitingDialog() {
+
+        if (isFinishing || isDestroyed) return
+
         waiting_dialog = Dialog(this)
         waiting_dialog?.setContentView(R.layout.iha_inter_ad_loading_dialog)
 
@@ -390,10 +394,20 @@ object InterstitialInHouseAds {
             ViewGroup.LayoutParams.MATCH_PARENT
         )
 
-        waiting_dialog?.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+        waiting_dialog?.window?.setBackgroundDrawable(
+            Color.TRANSPARENT.toDrawable()
+        )
 
         waiting_dialog?.setCancelable(false)
-        waiting_dialog?.show()
+
+        try {
+            waiting_dialog?.show()
+        } catch (e: WindowManager.BadTokenException) {
+            e.printStackTrace()
+        }
+        catch (e: RuntimeException){
+
+        }
     }
 
     private fun hideWaitingDialog() {
